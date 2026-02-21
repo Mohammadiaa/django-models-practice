@@ -9,9 +9,6 @@ services:
         - .env 
     ports:
         - ${PORT_ROOT}:${PORT_ROOT}
-    environment:
-      - SECRET_KEY=test
-      - DEBUG=True
     depends_on:            
       - db
 
