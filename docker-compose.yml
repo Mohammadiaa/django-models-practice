@@ -11,6 +11,8 @@ services:
         - ${PORT_ROOT}:${PORT_ROOT}
     depends_on:            
       - db
+    volumes:
+      - ./:/app
 
   db:                      
     image: postgres:16
