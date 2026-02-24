@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from .models import Profile,Team
+from .models import Profile,Team,Project
 
 # Register your models here.
 
@@ -18,5 +18,11 @@ class TeamAdmin(admin.ModelAdmin):
     filter_horizontal = ('members',) 
 
 
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ("title","team")
+    search_fields = ('title', 'team__name')
+    list_filter = ('team',) 
+
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Team, TeamAdmin)
+admin.site.register(Project, ProjectAdmin)
