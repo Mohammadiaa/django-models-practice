@@ -27,3 +27,12 @@ class Profile(models.Model):
 def create_user_profile (sender, instance, created, **kwargs):
     if created:      
         Profile.objects.get_or_create(user = instance)
+
+class Team(models.Model):
+    name = models.CharField(max_length=100)
+    foundation = models.DateField()
+    leader = models.ForeignKey(User,null=True, blank=True,related_name="led_teams", on_delete=models.SET_NULL)
+    members = models.ManyToManyField(User, related_name="teams")
+
+    def __str__(self):
+        return self.name
