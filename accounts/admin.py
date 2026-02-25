@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from .models import Profile,Team,Project,Task,Assignment
+from .models import Profile,Team,Project,Task,Assignment,TimeLog
 
 # Register your models here.
 
@@ -33,8 +33,21 @@ class AssignmentAdmin(admin.ModelAdmin):
     list_filter = ('assigned_date',)
     search_fields = ('task__title', 'user__username', 'assigned_by__username')
 
+
+class TimeLogAdmin(admin.ModelAdmin):
+    list_display = ('user_display', 'task', 'date_logged', 'hours')
+    list_filter = ('date_logged', 'task')
+    search_fields = ('user__username', 'task__title')
+
+    def user_display(self, obj):
+        if obj.user:
+            return obj.user.username
+        return "Deleted user"
+    user_display.short_description = 'User'
+
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Assignment, AssignmentAdmin)
+admin.site.register(TimeLog, TimeLogAdmin)
