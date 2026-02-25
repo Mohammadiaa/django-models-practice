@@ -44,5 +44,31 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+
+class Task(models.Model):
+    title = models.CharField(max_length=100)
     
+    class Status(models.TextChoices):
+        DONE = "Done", "Done"
+        IN_PROGRESS = "In progress", "In progress"
+        TO_DO = "To do", "To do"
+    status = models.CharField(max_length=20, default=Status.TO_DO, choices=Status.choices)
+
+    project = models.ForeignKey(Project, related_name="tasks",null=True, on_delete=models.SET_NULL) 
+    parent_task = models.ForeignKey("self",null=True, blank=True,related_name="subtasks", on_delete=models.SET_NULL ) 
+
+    assigned_users = models.ManyToManyField(User,
+        through='Assignment',
+        through_fields=('task', 'user'),
+        related_name="tasks_assigned")
+
+    def __str__(self):
+        return self.title
+    
+class Assignment(models.Model):
+    task = models.ForeignKey(Task, null=False , on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=False, related_name="assignments_received", on_delete=models.CASCADE)
+    assigned_by = models.ForeignKey(User, null=True ,related_name="assignments_given", on_delete=models.SET_NULL)
+    assigned_date = models.DateTimeField() 
+
     
