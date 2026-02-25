@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from .models import Profile,Team,Project
+from .models import Profile,Team,Project,Task,Assignment
 
 # Register your models here.
 
@@ -23,6 +23,18 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = ('title', 'team__name')
     list_filter = ('team',) 
 
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ('title', 'status', 'project', 'parent_task')
+    list_filter = ('status', 'project')
+    search_fields = ('title',)
+
+class AssignmentAdmin(admin.ModelAdmin):
+    list_display = ('task', 'user', 'assigned_by', 'assigned_date')
+    list_filter = ('assigned_date',)
+    search_fields = ('task__title', 'user__username', 'assigned_by__username')
+
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Project, ProjectAdmin)
+admin.site.register(Task, TaskAdmin)
+admin.site.register(Assignment, AssignmentAdmin)
