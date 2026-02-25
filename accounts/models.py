@@ -4,6 +4,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+
 # Create your models here.
 
 
@@ -71,4 +72,14 @@ class Assignment(models.Model):
     assigned_by = models.ForeignKey(User, null=True ,related_name="assignments_given", on_delete=models.SET_NULL)
     assigned_date = models.DateTimeField() 
 
-    
+
+class TimeLog(models.Model):
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="time_logs") 
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    date_logged  = models.DateTimeField(auto_now_add=True)
+    hours = models.FloatField()
+   
+    def __str__(self):
+        if self.user:
+            return f"{self.user.username} - {self.task.title} - {self.hours}h"
+        return f"Deleted user - {self.task.title} - {self.hours}h"
